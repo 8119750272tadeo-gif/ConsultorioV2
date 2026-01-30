@@ -1,1 +1,4 @@
-
+*.class
+*.swp
+.idea/
+.vscode/
