@@ -9,4 +9,4 @@
 Tadeo Jesùs Cortez Castillo
 
 ## Licencia
-Proyecto realizado con fines académicos
+Proyecto 
