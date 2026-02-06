@@ -4,9 +4,15 @@
 
 package com.mycompany.consultoriov2;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+
+
 
 /**
  *
@@ -20,6 +26,29 @@ static List<Cita> listaCitas = new ArrayList<Cita>();
 
 
     public static void main(String[] args) {
+        File carpetaDB = new File("db");
+        if(!carpetaDB.exists()){
+            carpetaDB.mkdir();
+        }
+        
+        String[] archivos = {
+        "db/doctores.txt",
+        "db/pacientes.txt",
+        "db/citas.txt",
+        
+        
+    };
+        for(String nombre : archivos){
+            File archivo = new File(nombre);
+            if(!archivo.exists()){
+                try {
+                    archivo.createNewFile();
+                } catch (IOException e){
+                    System.out.println("Error creando archivo: " + nombre);
+                }
+            }
+        }
+        
         String USUARIO_DEFAULT = "tadeo";
         String PASSWORD_DEFAULT = "123";
         
@@ -94,6 +123,12 @@ static List<Cita> listaCitas = new ArrayList<Cita>();
         System.out.println("Especialidad:");
         medico.especialidad = entrada.nextLine();
         listaMedicos.add(medico);
+        
+        try(PrintWriter pw = new PrintWriter(new FileWriter("db/doctores.txt",true))){
+            pw.println(medico.nombre +"," + medico.especialidad);
+        }catch( IOException e) {
+            System.out.println("Error guardando medico");
+        }
     }
     
     static void darAltaPaciente(){
@@ -106,6 +141,11 @@ static List<Cita> listaCitas = new ArrayList<Cita>();
         paciente.edad = entrada.nextLine();
         listaPacientes.add(paciente);
         
+        try (PrintWriter pw =new PrintWriter(new FileWriter("db/pacientes.txt", true))){
+            pw.println(paciente.nombre + "," + paciente.edad);
+        } catch (IOException e){
+            System.out.println("Error guardando paciente");
+        }  
     }
     
     static void crearCita(){
@@ -121,13 +161,19 @@ static List<Cita> listaCitas = new ArrayList<Cita>();
         System.out.println("Hora:");
         cita.hora = entrada.nextLine();
         listaCitas.add(cita);
+        
+        try(PrintWriter pw =new PrintWriter(new FileWriter("db/citas.txt", true))){
+            pw.println(cita.medico + "," + cita.paciente + "," + cita.fecha + "," + cita.hora);
+        }catch (IOException e){
+            System.out.println("Error guando cita");
+        }
     }
     
     static void mostrarMedicos(){
         System.out.println("---------Mostrar medicos--------");
         for (Medico medico : listaMedicos){
             System.out.println("Nombre: " + medico.nombre);
-            System.out.println("Especialidad: + medico.especialidad");
+            System.out.println("Especialidad: " + medico.especialidad);
         }
     }
     
